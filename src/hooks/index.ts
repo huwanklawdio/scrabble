@@ -2,65 +2,56 @@
 // Custom Hooks Export Index
 // ================================
 
-// This file will export all custom React hooks once they are implemented
-// Currently empty - hooks will be added in subsequent tasks
+// Game Context & Core Hooks (Task 3.1.1 & 3.1.2 - COMPLETED)
+export { useGame, GameProvider } from '../contexts/GameContext';
+export { default as useGameState } from './useGameState';
+export { default as useTilePlacement } from './useTilePlacement';
+export { default as useScoring } from './useScoring';
+export { default as useGameValidation } from './useGameValidation';
 
-// TODO: Add hook exports as they are implemented:
-// Game State Hooks
-// export { default as useGameState } from './game/useGameState';
-// export { default as useGameActions } from './game/useGameActions';
+// Local Component State Hooks (Task 3.2.1 - COMPLETED)
+export { default as useDragAndDrop } from './useDragAndDrop';
+export { default as useUIInteraction } from './useUIInteraction';
+export { default as useFormState } from './useFormState';
+export { default as useModalState } from './useModalState';
 
-// Board Interaction Hooks
-// export { default as useTilePlacement } from './board/useTilePlacement';
-// export { default as useDragAndDrop } from './board/useDragAndDrop';
+// Re-export types
+export type { 
+  DragAndDropHook, 
+  DragItem, 
+  DropZone, 
+  DragState, 
+  TouchState,
+  DragDropConfig 
+} from './useDragAndDrop';
+export type { 
+  UIInteractionHook, 
+  InteractionState, 
+  InteractionCallbacks,
+  UIInteractionConfig 
+} from './useUIInteraction';
+export type { 
+  FormStateHook, 
+  FormField, 
+  FormState, 
+  ValidationRule,
+  FieldConfig,
+  FormConfig 
+} from './useFormState';
+export type { 
+  ModalStateHook, 
+  ModalConfig, 
+  ModalState, 
+  ModalStackItem,
+  ModalManagerConfig 
+} from './useModalState';
 
-// UI Interaction Hooks
-// export { default as useKeyboardShortcuts } from './ui/useKeyboardShortcuts';
-// export { default as useModal } from './ui/useModal';
+// Re-export validation helpers
+export { ValidationRules } from './useFormState';
 
-// Utility Hooks
-// export { default as useDebounce } from './utils/useDebounce';
-// export { default as useAsync } from './utils/useAsync';
-
-// Game State Hooks
-export { default as useGameState } from './game/useGameState';
-export { default as useGameActions } from './game/useGameActions';
-export { default as useGameFlow } from './game/useGameFlow';
-
-// Board Interaction Hooks
-export { default as useTilePlacement } from './board/useTilePlacement';
-export { default as useBoardValidation } from './board/useBoardValidation';
-export { default as useDragAndDrop } from './board/useDragAndDrop';
-
-// Player Management Hooks
-export { default as usePlayerState } from './player/usePlayerState';
-export { default as useTileRack } from './player/useTileRack';
-export { default as useScoring } from './player/useScoring';
-
-// UI Interaction Hooks
-export { default as useKeyboardShortcuts } from './ui/useKeyboardShortcuts';
-export { default as useModal } from './ui/useModal';
-export { default as useNotifications } from './ui/useNotifications';
-export { default as useAccessibility } from './ui/useAccessibility';
-
-// Performance Hooks
-export { default as usePerformance } from './performance/usePerformance';
-export { default as useVirtualization } from './performance/useVirtualization';
-export { default as useLazyLoading } from './performance/useLazyLoading';
-
-// Responsive Design Hooks
-export { default as useResponsive } from './responsive/useResponsive';
-export { default as useBreakpoints } from './responsive/useBreakpoints';
-
-// Storage and Persistence Hooks
-export { default as useLocalStorage } from './storage/useLocalStorage';
-export { default as useGamePersistence } from './storage/useGamePersistence';
-
-// Network Hooks (for future multiplayer)
-export { default as useWebSocket } from './network/useWebSocket';
-export { default as useNetworkState } from './network/useNetworkState';
-
-// Utility Hooks
-export { default as useThrottle } from './utils/useThrottle';
-export { default as useTimeout } from './utils/useTimeout';
-export { default as useInterval } from './utils/useInterval'; 
+// Future hooks will be added in subsequent phases:
+// Phase 4: UI Components
+// Phase 5: Drag & Drop
+// Phase 6: Game Flow
+// Phase 7: Enhanced UX
+// Phase 8: Accessibility & Performance 

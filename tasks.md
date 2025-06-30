@@ -95,13 +95,13 @@
 
 ### 3.1 Context & Reducers
 
-- 🔴 **Task 3.1.1**: Create game context
+- 🟢 **Task 3.1.1**: Create game context
   - Set up React Context for game state
   - Create game state reducer
   - Define action types and creators
   - Add context provider component
 
-- 🔴 **Task 3.1.2**: Custom hooks
+- 🟢 **Task 3.1.2**: Custom hooks
   - Create `useGameState` hook
   - Implement `useTilePlacement` hook
   - Add `useScoring` hook
@@ -109,7 +109,7 @@
 
 ### 3.2 Component State Management
 
-- 🔴 **Task 3.2.1**: Local component state
+- 🟢 **Task 3.2.1**: Local component state
   - Implement drag-and-drop state management
   - Add UI interaction state (hovering, selecting)
   - Create form state for player setup
