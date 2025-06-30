@@ -53,7 +53,7 @@
 
 ### 2.1 Game Data Implementation
 
-- 🔴 **Task 2.1.1**: Implement tile system
+- 🟢 **Task 2.1.1**: Implement tile system
   - Create `data/tiles.ts` with official Scrabble tile distribution
   - Add letter point values
   - Implement tile bag shuffling logic
