@@ -15,7 +15,7 @@ export type {
 // TODO: Add data exports as they are implemented:
 // Core Game Data
 export * from './tiles';
-// export { default as board } from './board';
+export * from './board';
 // export { default as dictionary } from './dictionary';
 
 // Game Configuration

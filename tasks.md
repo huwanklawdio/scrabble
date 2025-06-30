@@ -59,7 +59,7 @@
   - Implement tile bag shuffling logic
   - Add tile drawing functionality
 
-- 🔴 **Task 2.1.2**: Create board configuration
+- 🟢 **Task 2.1.2**: Create board configuration
   - Define 15×15 board layout in `data/board.ts`
   - Map premium squares (DL, TL, DW, TW) positions
   - Add center star position
