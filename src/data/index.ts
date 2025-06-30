@@ -16,7 +16,7 @@ export type {
 // Core Game Data
 export * from './tiles';
 export * from './board';
-// export { default as dictionary } from './dictionary';
+export * from './dictionary';
 
 // Game Configuration
 // export { default as gameConfig } from './config/gameConfig';
