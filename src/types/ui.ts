@@ -254,4 +254,262 @@ export interface ViewState {
   animationsEnabled: boolean;
   soundEnabled: boolean;
   compactMode: boolean;
+}
+
+// ================================
+// Keyboard and Accessibility Types
+// ================================
+
+export interface KeyboardShortcut {
+  key: string;
+  ctrlKey?: boolean;
+  altKey?: boolean;
+  shiftKey?: boolean;
+  metaKey?: boolean;
+  action: string;
+  description: string;
+}
+
+export interface AccessibilityProps {
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-expanded'?: boolean;
+  'aria-selected'?: boolean;
+  'aria-pressed'?: boolean;
+  'aria-live'?: 'polite' | 'assertive' | 'off';
+  role?: string;
+  tabIndex?: number;
+}
+
+export interface FocusManagement {
+  focusableElements: HTMLElement[];
+  currentFocus: number;
+  trapFocus: boolean;
+  restoreFocus?: HTMLElement;
+}
+
+// ================================
+// Enhanced Component State Types
+// ================================
+
+export interface InteractionState {
+  isHovered: boolean;
+  isFocused: boolean;
+  isPressed: boolean;
+  isActive: boolean;
+  isDisabled: boolean;
+}
+
+export interface SelectionState {
+  selectedItems: string[];
+  lastSelected?: string;
+  selectionMode: 'single' | 'multiple' | 'range';
+  allowDeselect: boolean;
+}
+
+export interface PaginationState {
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  totalItems: number;
+}
+
+// ================================
+// Form Validation Types for Game Setup
+// ================================
+
+export interface PlayerNameValidation {
+  value: string;
+  isValid: boolean;
+  errors: string[];
+  minLength: number;
+  maxLength: number;
+  allowSpecialChars: boolean;
+}
+
+export interface GameSettingsValidation {
+  playerNames: PlayerNameValidation[];
+  timeLimit: {
+    value: number;
+    isValid: boolean;
+    min: number;
+    max: number;
+  };
+  isFormValid: boolean;
+  submitAttempted: boolean;
+}
+
+// ================================
+// Responsive Design Types
+// ================================
+
+export interface BreakpointState {
+  isMobile: boolean;
+  isTablet: boolean;
+  isDesktop: boolean;
+  isLargeScreen: boolean;
+  screenWidth: number;
+  screenHeight: number;
+}
+
+export interface ResponsiveLayout {
+  columns: number;
+  tileSize: 'small' | 'medium' | 'large';
+  showSidebar: boolean;
+  stackVertically: boolean;
+}
+
+// ================================
+// Performance and Optimization Types
+// ================================
+
+export interface VirtualizationConfig {
+  itemHeight: number;
+  containerHeight: number;
+  bufferSize: number;
+  renderRange: {
+    start: number;
+    end: number;
+  };
+}
+
+export interface LazyLoadConfig {
+  threshold: number;
+  rootMargin: string;
+  triggerOnce: boolean;
+}
+
+// ================================
+// Audio and Visual Feedback Types
+// ================================
+
+export interface SoundEffect {
+  name: string;
+  src: string;
+  volume: number;
+  loop: boolean;
+  preload: boolean;
+}
+
+export interface HapticFeedback {
+  type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
+  duration?: number;
+}
+
+export interface VisualFeedback {
+  type: 'pulse' | 'glow' | 'shake' | 'bounce' | 'flash';
+  color?: string;
+  duration: number;
+  intensity: number;
+}
+
+// ================================
+// Theme and Customization Types
+// ================================
+
+export interface BoardTheme {
+  name: string;
+  cellColors: {
+    normal: string;
+    doubleWord: string;
+    tripleWord: string;
+    doubleLetter: string;
+    tripleLetter: string;
+    center: string;
+  };
+  gridLines: {
+    color: string;
+    width: number;
+    opacity: number;
+  };
+  shadows: boolean;
+  roundedCorners: boolean;
+}
+
+export interface TileTheme {
+  backgroundColor: string;
+  textColor: string;
+  borderColor: string;
+  shadowColor: string;
+  font: {
+    family: string;
+    weight: string;
+    letterSpacing: string;
+  };
+}
+
+// ================================
+// Error Boundary and Recovery Types
+// ================================
+
+export interface ErrorBoundaryState {
+  hasError: boolean;
+  error?: Error;
+  errorInfo?: any;
+  retryCount: number;
+  maxRetries: number;
+}
+
+export interface RecoveryAction {
+  label: string;
+  action: () => void;
+  type: 'retry' | 'reset' | 'reload' | 'report';
+}
+
+// ================================
+// Component Lifecycle Types
+// ================================
+
+export interface ComponentLifecycle {
+  isMounted: boolean;
+  isInitialized: boolean;
+  isDestroyed: boolean;
+  initializationError?: string;
+}
+
+export interface AsyncComponentState<T = any> {
+  data?: T;
+  loading: boolean;
+  error?: string;
+  lastFetch?: Date;
+  retryCount: number;
+}
+
+// ================================
+// Extended Event Handler Types
+// ================================
+
+export interface ExtendedGameEventHandlers extends GameEventHandlers {
+  onKeyboardShortcut: (shortcut: KeyboardShortcut) => void;
+  onFocusChange: (element: HTMLElement | null) => void;
+  onAccessibilityAction: (action: string, target: HTMLElement) => void;
+  onThemeChange: (theme: BoardTheme | TileTheme) => void;
+  onPerformanceIssue: (metric: string, value: number) => void;
+  onErrorRecovery: (action: RecoveryAction) => void;
+}
+
+// ================================
+// Advanced UI State Types
+// ================================
+
+export interface AdvancedUIState extends UIState {
+  keyboardShortcuts: KeyboardShortcut[];
+  accessibility: {
+    screenReaderEnabled: boolean;
+    highContrastMode: boolean;
+    reducedMotion: boolean;
+    focusVisible: boolean;
+  };
+  responsive: BreakpointState;
+  performance: {
+    renderTime: number;
+    frameRate: number;
+    memoryUsage: number;
+  };
+  customization: {
+    boardTheme: BoardTheme;
+    tileTheme: TileTheme;
+    layout: ResponsiveLayout;
+  };
 } 
