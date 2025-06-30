@@ -79,13 +79,13 @@
   - Add player creation and management
   - Create turn progression logic
 
-- 🔴 **Task 2.2.2**: Move validation system
+- ✅ **Task 2.2.2**: Move validation system
   - Implement tile placement validation
   - Add word formation checking
   - Create adjacency validation
   - Add first word center star requirement
 
-- 🔴 **Task 2.2.3**: Scoring system
+- ✅ **Task 2.2.3**: Scoring system
   - Implement base scoring calculation
   - Add premium square multipliers
   - Create bonus calculation (7-tile bonus)
