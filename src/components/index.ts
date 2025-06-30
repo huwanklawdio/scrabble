@@ -26,10 +26,13 @@ export { BoardCell } from './BoardCell';
 export type { BoardCellProps } from './BoardCell';
 export { Tile, TileGroup } from './Tile';
 export type { TileProps, TileGroupProps } from './Tile';
+export { TileRack } from './TileRack';
+export type { TileRackProps } from './TileRack';
+export { ScoreBoard } from './ScoreBoard';
+export type { ScoreBoardProps } from './ScoreBoard';
+export { GameControls } from './GameControls';
+export type { GameControlsProps } from './GameControls';
 
 // TODO: Add component exports as they are implemented:
-// export { default as TileRack } from './Player/TileRack';
-// export { default as ScoreBoard } from './Player/ScoreBoard';
-// export { default as GameControls } from './Controls/GameControls';
 // export { default as GameLayout } from './Layout/GameLayout';
 // export { default as Modal } from './Modal/Modal'; 

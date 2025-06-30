@@ -139,19 +139,19 @@
 
 ### 4.2 Player Interface Components
 
-- 🔴 **Task 4.2.1**: Tile rack component
+- 🟢 **Task 4.2.1**: Tile rack component
   - Create `TileRack` component for player tiles
   - Implement drag source functionality
   - Add tile sorting and organization
   - Create responsive layout for different screen sizes
 
-- 🔴 **Task 4.2.2**: Score display component
+- 🟢 **Task 4.2.2**: Score display component
   - Create `ScoreBoard` component
   - Display current scores for all players
   - Add turn indicator
   - Show remaining tiles counter
 
-- 🔴 **Task 4.2.3**: Game controls component
+- 🟢 **Task 4.2.3**: Game controls component
   - Create `GameControls` component
   - Add Submit, Pass, Exchange buttons
   - Implement button state management
