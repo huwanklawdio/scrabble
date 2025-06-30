@@ -175,19 +175,19 @@
 
 ### 5.1 Drag & Drop Implementation
 
-- 🔴 **Task 5.1.1**: HTML5 drag & drop setup
+- 🟢 **Task 5.1.1**: HTML5 drag & drop setup
   - Implement draggable tiles
   - Add drop zones on board cells
   - Create drag preview styling
   - Add drag feedback visual cues
 
-- 🔴 **Task 5.1.2**: Touch device support
+- 🟢 **Task 5.1.2**: Touch device support
   - Add touch event handlers for mobile
   - Implement touch-based tile placement
   - Add haptic feedback where supported
   - Create mobile-specific interactions
 
-- 🔴 **Task 5.1.3**: Drag validation
+- 🟢 **Task 5.1.3**: Drag validation
   - Implement real-time placement validation
   - Add visual feedback for valid/invalid drops
   - Create snap-to-grid functionality

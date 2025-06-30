@@ -1,5 +1,17 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { Tile as TileType } from '../types/game';
+import { dragAndDropUtils } from '../utils/dragAndDrop';
+import { touchDragAndDropUtils } from '../utils/touchDragAndDrop';
+
+const {
+  DragDataManager,
+  DragPreviewManager,
+  DragStateManager,
+  TouchSupportDetector,
+  DragAccessibility,
+} = dragAndDropUtils;
+
+const { TouchDragManager, useTouchDrag } = touchDragAndDropUtils;
 
 // ================================
 // Tile Component Props
@@ -57,6 +69,9 @@ export const Tile: React.FC<TileProps> = ({
   const [isDraggingInternal, setIsDraggingInternal] = useState(false);
   const [blankLetter, setBlankLetter] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+  const tileRef = useRef<HTMLDivElement>(null);
+  const touchManager = TouchDragManager.getInstance();
+  const { isDragging: isTouchDragging } = useTouchDrag();
 
   // Focus input when showing blank input
   useEffect(() => {
@@ -81,38 +96,44 @@ export const Tile: React.FC<TileProps> = ({
       return;
     }
 
-    // Set drag data
-    e.dataTransfer.setData('application/json', JSON.stringify(tile));
-    e.dataTransfer.effectAllowed = 'move';
+    // Create enhanced drag data
+    const dragData = {
+      type: 'tile' as const,
+      tile,
+      sourceRack: !isPlaced,
+    };
+
+    // Set drag data using enhanced manager
+    DragDataManager.setTileData(e.dataTransfer, dragData);
     
-    // Create drag image (only in non-test environment)
-    if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'test') {
-      try {
-        const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
-        dragImage.style.transform = 'rotate(-5deg)';
-        dragImage.style.opacity = '0.8';
-        dragImage.removeAttribute('data-testid'); // Remove test ID to avoid duplicates
-        document.body.appendChild(dragImage);
-        e.dataTransfer.setDragImage(dragImage, 32, 32);
-        setTimeout(() => {
-          if (document.body.contains(dragImage)) {
-            document.body.removeChild(dragImage);
-          }
-        }, 0);
-      } catch (error) {
-        // Silently fail in test environment
-      }
-    }
+    // Create enhanced drag preview
+    DragPreviewManager.setDragImage(e.dataTransfer, e.currentTarget, {
+      rotation: -5,
+      scale: 1.1,
+      opacity: 0.9,
+      shadow: true,
+      glow: isSelected,
+    });
+
+    // Update global drag state
+    DragStateManager.startDrag(dragData);
+    
+    // Set accessibility descriptions
+    DragAccessibility.setDragDescriptions(e.currentTarget, tile);
 
     setIsDraggingInternal(true);
     
     if (onDragStart) {
       onDragStart(tile);
     }
-  }, [tile, onDragStart, isDisabled, isPlaced]);
+  }, [tile, onDragStart, isDisabled, isPlaced, isSelected]);
 
   const handleDragEnd = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    
+    // Update global drag state
+    DragStateManager.endDrag();
+    
     setIsDraggingInternal(false);
     
     if (onDragEnd) {
@@ -134,6 +155,34 @@ export const Tile: React.FC<TileProps> = ({
     }
   }, []);
 
+  // Touch event handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (isDisabled || isPlaced || !tileRef.current) return;
+    
+    touchManager.handleTouchStart(e.nativeEvent, tile, tileRef.current);
+    setIsDraggingInternal(true);
+    
+    if (onDragStart) {
+      onDragStart(tile);
+    }
+  }, [tile, onDragStart, isDisabled, isPlaced, touchManager]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDraggingInternal) return;
+    touchManager.handleTouchMove(e.nativeEvent);
+  }, [isDraggingInternal, touchManager]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDraggingInternal) return;
+    
+    touchManager.handleTouchEnd(e.nativeEvent);
+    setIsDraggingInternal(false);
+    
+    if (onDragEnd) {
+      onDragEnd(tile);
+    }
+  }, [tile, onDragEnd, isDraggingInternal, touchManager]);
+
   // ================================
   // Styling
   // ================================
@@ -150,6 +199,7 @@ export const Tile: React.FC<TileProps> = ({
     font-bold
     transition-all duration-200
     select-none
+    group
   `;
 
   const interactionClasses = `
@@ -160,9 +210,11 @@ export const Tile: React.FC<TileProps> = ({
   `;
 
   const stateClasses = `
-    ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2 scale-110' : ''}
-    ${isDragging || isDraggingInternal ? 'opacity-50 scale-95' : ''}
+    ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2 scale-110 shadow-lg' : ''}
+    ${isDragging || isDraggingInternal ? 'opacity-50 scale-95 rotate-1' : ''}
+    ${isTouchDragging && touchManager.getDraggedTile()?.id === tile.id ? 'opacity-50 scale-95 rotate-1' : ''}
     ${isPlaced ? 'bg-amber-50 border-amber-100' : ''}
+    ${(DragStateManager.isDragging() || touchManager.isDragging()) && !isDraggingInternal ? 'opacity-75' : ''}
   `;
 
   const letterClasses = `
@@ -203,11 +255,15 @@ export const Tile: React.FC<TileProps> = ({
 
   return (
     <div
+      ref={tileRef}
       className={`${baseClasses} ${interactionClasses} ${stateClasses} ${className}`}
       onClick={handleClick}
       draggable={!isDisabled && !isPlaced}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       role="button"
       tabIndex={isDisabled ? -1 : 0}
       aria-label={`Tile ${tile.letter || 'blank'} worth ${tile.points} points${isSelected ? ', selected' : ''}${isPlaced ? ', placed on board' : ''}`}
@@ -227,9 +283,17 @@ export const Tile: React.FC<TileProps> = ({
         </span>
       )}
       
-      {/* Visual feedback for dragging */}
+      {/* Enhanced visual feedback for dragging */}
       {(isDragging || isDraggingInternal) && (
-        <div className="absolute inset-0 bg-blue-500 opacity-20 rounded-lg animate-pulse" />
+        <>
+          <div className="absolute inset-0 bg-blue-500 opacity-20 rounded-lg animate-pulse" />
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-purple-400 opacity-30 rounded-lg blur-sm" />
+        </>
+      )}
+      
+      {/* Drag affordance indicator */}
+      {!isDisabled && !isPlaced && (
+        <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-gray-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
       )}
     </div>
   );

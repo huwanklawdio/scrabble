@@ -1,5 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import type { BoardCell as BoardCellType, PremiumSquareType, Tile } from '../types/game';
+import { dragAndDropUtils } from '../utils/dragAndDrop';
+import { touchDragAndDropUtils } from '../utils/touchDragAndDrop';
+
+const {
+  DragDataManager,
+  DropZoneValidator,
+  DragAccessibility,
+} = dragAndDropUtils;
+
+const { TouchDragManager, useTouchDrag } = touchDragAndDropUtils;
 
 // ================================
 // BoardCell Component Props
@@ -98,6 +108,48 @@ export const BoardCell: React.FC<BoardCellProps> = ({
   disabled = false,
 }) => {
   const [dragCounter, setDragCounter] = useState(0);
+  const cellRef = React.useRef<HTMLDivElement>(null);
+  const touchManager = TouchDragManager.getInstance();
+
+  // Set up accessibility descriptions (only for additional context, don't override aria-label)
+  React.useEffect(() => {
+    if (cellRef.current && !cellRef.current.getAttribute('aria-label')) {
+      DragAccessibility.setDropZoneDescriptions(cellRef.current, row, col);
+    }
+  }, [row, col]);
+
+  // Register as a touch drop target
+  React.useEffect(() => {
+    if (cellRef.current) {
+      const cellId = `cell-${row}-${col}`;
+      touchManager.registerDropTarget(cellId, cellRef.current, row, col);
+      
+      return () => {
+        touchManager.unregisterDropTarget(cellId);
+      };
+    }
+  }, [row, col, touchManager]);
+
+  // Handle touch drop events
+  React.useEffect(() => {
+    const handleTouchDrop = (e: CustomEvent) => {
+      const { tile, row: dropRow, col: dropCol } = e.detail;
+      
+      if (dropRow === row && dropCol === col && onDrop && !cell.tile && !disabled && isValidDropTarget) {
+        onDrop(row, col, tile);
+      }
+    };
+
+    if (cellRef.current) {
+      cellRef.current.addEventListener('touchdrop', handleTouchDrop as EventListener);
+      
+      return () => {
+        if (cellRef.current) {
+          cellRef.current.removeEventListener('touchdrop', handleTouchDrop as EventListener);
+        }
+      };
+    }
+  }, [row, col, onDrop, cell.tile, disabled, isValidDropTarget]);
 
   // ================================
   // Event Handlers
@@ -119,12 +171,29 @@ export const BoardCell: React.FC<BoardCellProps> = ({
     e.preventDefault();
     e.stopPropagation();
     
-    if (!disabled && isValidDropTarget && !cell.tile) {
-      e.dataTransfer.dropEffect = 'move';
-    } else {
-      e.dataTransfer.dropEffect = 'none';
+    // Try to get drag data, but don't fail if it's not available
+    let isValid = true;
+    try {
+      const dragData = DragDataManager.getTileData(e.dataTransfer);
+      
+      // Validate drop zone
+      const dropZoneState = DropZoneValidator.validateDropTarget(
+        dragData,
+        row,
+        col,
+        !!cell.tile,
+        disabled || !isValidDropTarget
+      );
+      
+      isValid = dropZoneState.isValidTarget;
+    } catch (error) {
+      // Fallback validation for test environments
+      isValid = !disabled && isValidDropTarget && !cell.tile;
     }
-  }, [disabled, isValidDropTarget, cell.tile]);
+    
+    // Set appropriate drop effect
+    e.dataTransfer.dropEffect = isValid ? 'move' : 'none';
+  }, [disabled, isValidDropTarget, cell.tile, row, col]);
 
   const handleDragEnter = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -156,13 +225,46 @@ export const BoardCell: React.FC<BoardCellProps> = ({
     
     setDragCounter(0);
     
+    // Standard validation for backward compatibility
     if (!disabled && isValidDropTarget && !cell.tile && onDrop) {
-      try {
-        const tileData = e.dataTransfer.getData('application/json');
-        const tile = JSON.parse(tileData) as Tile;
-        onDrop(row, col, tile);
-      } catch (error) {
-        console.error('Failed to parse dropped tile data:', error);
+      // Try enhanced drag data first
+      let dragData = DragDataManager.getTileData(e.dataTransfer);
+      let tileToUse = dragData?.tile;
+      
+      // Fallback to legacy JSON format for compatibility
+      if (!tileToUse) {
+        try {
+          const legacyData = e.dataTransfer.getData('application/json');
+          if (legacyData) {
+            tileToUse = JSON.parse(legacyData);
+            dragData = { type: 'tile', tile: tileToUse };
+          }
+        } catch (error) {
+          console.warn('Failed to parse drag data:', error);
+        }
+      }
+      
+      if (tileToUse) {
+        // Enhanced validation if we have enhanced data
+        if (dragData) {
+          const dropZoneState = DropZoneValidator.validateDropTarget(
+            dragData,
+            row,
+            col,
+            !!cell.tile,
+            disabled || !isValidDropTarget
+          );
+          
+          if (dropZoneState.isValidTarget) {
+            DragAccessibility.announceDropAction(tileToUse, row, col, true);
+            onDrop(row, col, tileToUse);
+          } else {
+            DragAccessibility.announceDropAction(tileToUse, row, col, false);
+          }
+        } else {
+          // Legacy behavior
+          onDrop(row, col, tileToUse);
+        }
       }
     }
     
@@ -187,8 +289,10 @@ export const BoardCell: React.FC<BoardCellProps> = ({
   `;
 
   const dragClasses = `
-    ${isDragOver && isValidDropTarget && !cell.tile ? 'ring-2 ring-green-500 ring-offset-2 scale-105' : ''}
-    ${isDragOver && (!isValidDropTarget || cell.tile) ? 'ring-2 ring-red-500 ring-offset-2 opacity-50' : ''}
+    ${isDragOver && isValidDropTarget && !cell.tile ? 'ring-2 ring-green-500 ring-offset-2 scale-105 bg-green-50 shadow-lg' : ''}
+    ${isDragOver && (!isValidDropTarget || cell.tile) ? 'ring-2 ring-red-500 ring-offset-2 opacity-50 bg-red-50 animate-pulse' : ''}
+    ${dragCounter > 0 && isValidDropTarget && !cell.tile ? 'bg-green-50 border-green-300' : ''}
+    ${dragCounter > 0 && (!isValidDropTarget || cell.tile) ? 'bg-red-50 border-red-300' : ''}
   `;
 
   // ================================
@@ -216,6 +320,7 @@ export const BoardCell: React.FC<BoardCellProps> = ({
 
   return (
     <div
+      ref={cellRef}
       className={`${baseClasses} ${premiumClasses} ${interactionClasses} ${dragClasses}`}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
