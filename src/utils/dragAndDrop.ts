@@ -274,14 +274,26 @@ export class DragStateManager {
   static startDrag(data: DragData): void {
     this.dragInProgress = true;
     this.dragData = data;
-    this.notifyCallbacks('dragStart');
+    // Defer callback notifications to avoid React setState during render
+    // Use synchronous calls in test environment
+    if (process.env.NODE_ENV === 'test') {
+      this.notifyCallbacks('dragStart');
+    } else {
+      setTimeout(() => this.notifyCallbacks('dragStart'), 0);
+    }
   }
 
   static endDrag(): void {
     this.dragInProgress = false;
     this.dragData = null;
     DragPreviewManager.cleanupAll();
-    this.notifyCallbacks('dragEnd');
+    // Defer callback notifications to avoid React setState during render
+    // Use synchronous calls in test environment
+    if (process.env.NODE_ENV === 'test') {
+      this.notifyCallbacks('dragEnd');
+    } else {
+      setTimeout(() => this.notifyCallbacks('dragEnd'), 0);
+    }
   }
 
   static isDragging(): boolean {

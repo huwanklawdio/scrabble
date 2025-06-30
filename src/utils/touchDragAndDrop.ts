@@ -147,7 +147,8 @@ export class TouchDragManager {
       tile: this.dragState.draggedTile!,
       sourceRack: true,
     });
-    this.notifyCallbacks();
+    // Defer callback notifications to avoid React setState during render
+    setTimeout(() => this.notifyCallbacks(), 0);
   }
 
   private endDrag(): void {
@@ -164,7 +165,8 @@ export class TouchDragManager {
     };
 
     DragStateManager.endDrag();
-    this.notifyCallbacks();
+    // Defer callback notifications to avoid React setState during render
+    setTimeout(() => this.notifyCallbacks(), 0);
   }
 
   // ================================

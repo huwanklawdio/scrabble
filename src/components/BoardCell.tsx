@@ -9,7 +9,7 @@ const {
   DragAccessibility,
 } = dragAndDropUtils;
 
-const { TouchDragManager, useTouchDrag } = touchDragAndDropUtils;
+const { TouchDragManager } = touchDragAndDropUtils;
 
 // ================================
 // BoardCell Component Props
