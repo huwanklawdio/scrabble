@@ -22,9 +22,10 @@ export type {
 // Board Components
 export { Board } from './Board';
 export type { BoardProps } from './Board';
+export { BoardCell } from './BoardCell';
+export type { BoardCellProps } from './BoardCell';
 
 // TODO: Add component exports as they are implemented:
-// export { default as BoardCell } from './Board/BoardCell';
 // export { default as Tile } from './Board/Tile';
 // export { default as TileRack } from './Player/TileRack';
 // export { default as ScoreBoard } from './Player/ScoreBoard';

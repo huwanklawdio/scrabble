@@ -125,7 +125,7 @@
   - Implement tile display on board
   - Add responsive grid sizing
 
-- 🔴 **Task 4.1.2**: Board cell component
+- 🟢 **Task 4.1.2**: Board cell component
   - Create `BoardCell` component
   - Add drag-and-drop target functionality
   - Implement hover and selection states

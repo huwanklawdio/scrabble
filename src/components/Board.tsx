@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGameState } from '../hooks/useGameState';
-import type { Board as BoardType, BoardCell, PremiumSquareType } from '../types/game';
+import { BoardCell } from './BoardCell';
+import type { Board as BoardType, Tile } from '../types/game';
 
 // ================================
 // Board Component Props
@@ -11,114 +12,16 @@ export interface BoardProps {
   onCellClick?: (row: number, col: number) => void;
   onCellHover?: (row: number, col: number) => void;
   onCellLeave?: () => void;
+  onCellDrop?: (row: number, col: number, tile: Tile) => void;
+  onCellDragEnter?: (row: number, col: number) => void;
+  onCellDragLeave?: (row: number, col: number) => void;
   highlightedCells?: Set<string>;
   selectedCell?: { row: number; col: number } | null;
+  dragOverCell?: { row: number; col: number } | null;
+  validDropTargets?: Set<string>;
+  disabled?: boolean;
 }
 
-// ================================
-// Premium Square Styling
-// ================================
-
-const getPremiumSquareClasses = (premiumType: PremiumSquareType | null): string => {
-  switch (premiumType) {
-    case 'TW':
-      return 'bg-red-600 text-white';
-    case 'DW':
-      return 'bg-pink-500 text-white';
-    case 'TL':
-      return 'bg-blue-600 text-white';
-    case 'DL':
-      return 'bg-blue-400 text-white';
-    case 'center':
-      return 'bg-pink-500 text-white';
-    default:
-      return 'bg-green-100';
-  }
-};
-
-const getPremiumSquareLabel = (premiumType: PremiumSquareType | null): string => {
-  switch (premiumType) {
-    case 'TW':
-      return 'TW';
-    case 'DW':
-      return 'DW';
-    case 'TL':
-      return 'TL';
-    case 'DL':
-      return 'DL';
-    case 'center':
-      return '★';
-    default:
-      return '';
-  }
-};
-
-// ================================
-// Board Cell Component
-// ================================
-
-interface BoardCellComponentProps {
-  cell: BoardCell;
-  row: number;
-  col: number;
-  onClick?: (row: number, col: number) => void;
-  onMouseEnter?: (row: number, col: number) => void;
-  onMouseLeave?: () => void;
-  isHighlighted?: boolean;
-  isSelected?: boolean;
-}
-
-const BoardCellComponent: React.FC<BoardCellComponentProps> = ({
-  cell,
-  row,
-  col,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-  isHighlighted,
-  isSelected,
-}) => {
-  const handleClick = () => {
-    onClick?.(row, col);
-  };
-
-  const handleMouseEnter = () => {
-    onMouseEnter?.(row, col);
-  };
-
-  const baseClasses = 'aspect-square border border-gray-300 flex items-center justify-center font-semibold text-xs sm:text-sm transition-all duration-200';
-  const premiumClasses = !cell.tile ? getPremiumSquareClasses(cell.premiumType) : 'bg-amber-100';
-  const interactionClasses = `
-    ${isHighlighted ? 'ring-2 ring-blue-400 ring-offset-1' : ''}
-    ${isSelected ? 'ring-2 ring-blue-600 ring-offset-2' : ''}
-    ${onClick ? 'cursor-pointer hover:brightness-110' : ''}
-  `;
-
-  return (
-    <div
-      className={`${baseClasses} ${premiumClasses} ${interactionClasses}`}
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={onMouseLeave}
-      data-testid={`cell-${row}-${col}`}
-    >
-      {cell.tile ? (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-amber-100 rounded">
-          <span className="text-gray-800 font-bold text-sm sm:text-base">
-            {cell.tile.letter}
-          </span>
-          <span className="text-gray-600 text-xs">
-            {cell.tile.points}
-          </span>
-        </div>
-      ) : (
-        <span className="text-xs opacity-80">
-          {getPremiumSquareLabel(cell.premiumType)}
-        </span>
-      )}
-    </div>
-  );
-};
 
 // ================================
 // Board Component
@@ -129,8 +32,14 @@ export const Board: React.FC<BoardProps> = ({
   onCellClick,
   onCellHover,
   onCellLeave,
+  onCellDrop,
+  onCellDragEnter,
+  onCellDragLeave,
   highlightedCells = new Set(),
   selectedCell,
+  dragOverCell,
+  validDropTargets = new Set(),
+  disabled = false,
 }) => {
   const { board } = useGameState();
 
@@ -172,7 +81,7 @@ export const Board: React.FC<BoardProps> = ({
               
               {/* Row Cells */}
               {row.map((cell, colIndex) => (
-                <BoardCellComponent
+                <BoardCell
                   key={`cell-${rowIndex}-${colIndex}`}
                   cell={cell}
                   row={rowIndex}
@@ -180,10 +89,21 @@ export const Board: React.FC<BoardProps> = ({
                   onClick={onCellClick}
                   onMouseEnter={onCellHover}
                   onMouseLeave={onCellLeave}
+                  onDrop={onCellDrop}
+                  onDragEnter={onCellDragEnter}
+                  onDragLeave={onCellDragLeave}
                   isHighlighted={highlightedCells.has(getCellKey(rowIndex, colIndex))}
                   isSelected={
                     selectedCell?.row === rowIndex && selectedCell?.col === colIndex
                   }
+                  isDragOver={
+                    dragOverCell?.row === rowIndex && dragOverCell?.col === colIndex
+                  }
+                  isValidDropTarget={
+                    validDropTargets.size === 0 || 
+                    validDropTargets.has(getCellKey(rowIndex, colIndex))
+                  }
+                  disabled={disabled}
                 />
               ))}
             </React.Fragment>
