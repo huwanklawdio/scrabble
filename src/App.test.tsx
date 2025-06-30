@@ -5,7 +5,8 @@ import App from './App';
 describe('App Component', () => {
   it('renders the Scrabble game title', () => {
     render(<App />);
-    expect(screen.getByText('🎯 Scrabble Game')).toBeInTheDocument();
+    expect(screen.getByText('🎯')).toBeInTheDocument();
+    expect(screen.getByText('Scrabble Game')).toBeInTheDocument();
   });
 
   it('renders the game board', () => {

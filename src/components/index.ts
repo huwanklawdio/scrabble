@@ -32,7 +32,9 @@ export { ScoreBoard } from './ScoreBoard';
 export type { ScoreBoardProps } from './ScoreBoard';
 export { GameControls } from './GameControls';
 export type { GameControlsProps } from './GameControls';
+export { GameLayout, LayoutProvider, useLayoutContext } from './GameLayout';
+export type { GameLayoutProps, LayoutContextValue, LayoutProviderProps } from './GameLayout';
+export { Header } from './Header';
+export type { HeaderProps } from './Header';
 
-// TODO: Add component exports as they are implemented:
-// export { default as GameLayout } from './Layout/GameLayout';
-// export { default as Modal } from './Modal/Modal'; 
+// TODO: Add component exports as they are implemented: 

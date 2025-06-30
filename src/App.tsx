@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GameProvider } from './contexts/GameContext';
-import { Board, Tile, TileGroup, TileRack, ScoreBoard, GameControls } from './components';
+import { Board, Tile, TileGroup, TileRack, ScoreBoard, GameControls, GameLayout, Header } from './components';
 import { useGame } from './contexts/GameContext';
 import type { Tile as TileType } from './types/game';
 
@@ -88,108 +88,109 @@ function GameContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 text-center mb-8">
-          🎯 Scrabble Game
-        </h1>
-        
-        {/* ScoreBoard Component Demo */}
-        <div className="mb-6">
-          <ScoreBoard
-            players={gameState?.players || []}
-            currentPlayerIndex={gameState?.currentPlayerIndex || 0}
-            gamePhase={gameState?.phase || 'setup'}
-            remainingTiles={gameState?.tileBag.remaining || 100}
-            totalTiles={100}
-            showTurnTimer={true}
-            turnTimeRemaining={85}
-            showPlayerDetails={true}
-            showGameInfo={true}
-          />
-        </div>
-        
-        <div className="flex justify-center mb-4">
-          <Board
-            onCellClick={handleCellClick}
-            onCellHover={handleCellHover}
-            onCellLeave={handleCellLeave}
-            onCellDrop={handleCellDrop}
-            onCellDragEnter={handleCellDragEnter}
-            onCellDragLeave={handleCellDragLeave}
-            selectedCell={selectedCell}
-            highlightedCells={highlightedCells}
-            dragOverCell={dragOverCell}
-          />
-        </div>
-        
-        {selectedCell && (
-          <div className="text-center mt-4 text-gray-700">
-            Selected: Row {selectedCell.row + 1}, Column {String.fromCharCode(65 + selectedCell.col)}
+    <GameLayout
+      header={
+        <Header
+          gamePhase={gameState?.phase || 'setup'}
+          gameMode="local"
+          currentPlayer={gameState?.players?.[gameState?.currentPlayerIndex || 0]?.name}
+          gameId="demo-game-123"
+          onNewGame={() => console.log('New game')}
+          onSaveGame={() => console.log('Save game')}
+          onLoadGame={() => console.log('Load game')}
+          onExitGame={() => console.log('Exit game')}
+          onSettingsChange={(settings) => console.log('Settings changed:', settings)}
+        />
+      }
+      board={
+        <Board
+          onCellClick={handleCellClick}
+          onCellHover={handleCellHover}
+          onCellLeave={handleCellLeave}
+          onCellDrop={handleCellDrop}
+          onCellDragEnter={handleCellDragEnter}
+          onCellDragLeave={handleCellDragLeave}
+          selectedCell={selectedCell}
+          highlightedCells={highlightedCells}
+          dragOverCell={dragOverCell}
+        />
+      }
+      scoreBoard={
+        <ScoreBoard
+          players={gameState?.players || []}
+          currentPlayerIndex={gameState?.currentPlayerIndex || 0}
+          gamePhase={gameState?.phase || 'setup'}
+          remainingTiles={gameState?.tileBag.remaining || 100}
+          totalTiles={100}
+          showTurnTimer={true}
+          turnTimeRemaining={85}
+          showPlayerDetails={true}
+          showGameInfo={true}
+        />
+      }
+      tileRack={
+        <TileRack
+          tiles={demoTiles}
+          onTileClick={handleTileClick}
+          onTileDragStart={handleTileDragStart}
+          onTileDragEnd={handleTileDragEnd}
+          onTileExchange={(tiles) => console.log('Exchange tiles:', tiles)}
+          selectedTileIds={new Set(selectedTileId ? [selectedTileId] : [])}
+          showTileCount
+          showExchangeButton
+          allowSorting
+          allowExchange
+        />
+      }
+      gameControls={
+        <GameControls
+          gamePhase={gameState?.phase || 'playing'}
+          isCurrentPlayer={true}
+          canSubmit={selectedTileId !== null || selectedCell !== null}
+          canPass={true}
+          canExchange={true}
+          hasSelectedTiles={selectedTileId !== null}
+          placedTilesCount={selectedCell ? 1 : 0}
+          onSubmit={() => console.log('Submit move')}
+          onPass={() => console.log('Pass turn')}
+          onExchange={() => console.log('Exchange tiles')}
+          onClear={() => {
+            setSelectedCell(null);
+            setSelectedTileId(null);
+            console.log('Clear board');
+          }}
+          onUndo={() => console.log('Undo last action')}
+          onHint={() => console.log('Show hint')}
+          onShuffle={() => console.log('Shuffle rack')}
+          showAdvancedControls={true}
+          enableKeyboardShortcuts={true}
+        />
+      }
+      sidebar={
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 className="font-semibold text-gray-800 mb-2">Game Info</h3>
+          {selectedCell && (
+            <div className="text-sm text-gray-600">
+              Selected: Row {selectedCell.row + 1}, Column {String.fromCharCode(65 + selectedCell.col)}
+            </div>
+          )}
+          {draggedTile && (
+            <div className="text-sm text-gray-600 mt-2">
+              Dragging: {draggedTile.letter || 'Blank'}
+            </div>
+          )}
+          <div className="mt-4 space-y-1 text-xs text-gray-500">
+            <p>✨ Complete responsive layout</p>
+            <p>✨ Header with settings & help</p>
+            <p>✨ Keyboard shortcuts enabled</p>
+            <p>✨ Mobile-friendly design</p>
           </div>
-        )}
-        
-        {/* Game Layout Demo */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-          {/* TileRack */}
-          <div className="lg:col-span-2">
-            <TileRack
-              tiles={demoTiles}
-              onTileClick={handleTileClick}
-              onTileDragStart={handleTileDragStart}
-              onTileDragEnd={handleTileDragEnd}
-              onTileExchange={(tiles) => console.log('Exchange tiles:', tiles)}
-              selectedTileIds={new Set(selectedTileId ? [selectedTileId] : [])}
-              size="large"
-              showTileCount
-              showExchangeButton
-              allowSorting
-              allowExchange
-            />
-          </div>
-          
-          {/* GameControls */}
-          <div>
-            <GameControls
-              gamePhase={gameState?.phase || 'playing'}
-              isCurrentPlayer={true}
-              canSubmit={selectedTileId !== null || selectedCell !== null}
-              canPass={true}
-              canExchange={true}
-              hasSelectedTiles={selectedTileId !== null}
-              placedTilesCount={selectedCell ? 1 : 0}
-              onSubmit={() => console.log('Submit move')}
-              onPass={() => console.log('Pass turn')}
-              onExchange={() => console.log('Exchange tiles')}
-              onClear={() => {
-                setSelectedCell(null);
-                setSelectedTileId(null);
-                console.log('Clear board');
-              }}
-              onUndo={() => console.log('Undo last action')}
-              onHint={() => console.log('Show hint')}
-              onShuffle={() => console.log('Shuffle rack')}
-              showAdvancedControls={true}
-              enableKeyboardShortcuts={true}
-            />
-          </div>
         </div>
-        
-        <div className="text-center mt-8 text-gray-600 space-y-2">
-          <p>✨ ScoreBoard shows player scores, turn indicators, and game info</p>
-          <p>✨ GameControls provide Submit, Pass, Exchange actions with keyboard shortcuts</p>
-          <p>✨ Click tiles to select them in the rack</p>
-          <p>✨ Drag tiles from rack to empty cells on the board</p>
-          <p>✨ Use keyboard shortcuts: Enter (Submit), P (Pass), E (Exchange), C (Clear)</p>
-        </div>
-        
-        {draggedTile && (
-          <div className="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
-            <p className="text-sm text-gray-600">Dragging: {draggedTile.letter || 'Blank'}</p>
-          </div>
-        )}
-      </div>
-    </div>
+      }
+      variant="auto"
+      theme="light"
+      showSidebar={true}
+    />
   );
 }
 

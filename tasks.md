@@ -159,13 +159,13 @@
 
 ### 4.3 UI Layout Components
 
-- 🔴 **Task 4.3.1**: Main game layout
+- 🟢 **Task 4.3.1**: Main game layout
   - Create `GameLayout` component
   - Arrange board, racks, and controls
   - Add responsive design breakpoints
   - Implement mobile-friendly layout
 
-- 🔴 **Task 4.3.2**: Header and navigation
+- 🟢 **Task 4.3.2**: Header and navigation
   - Create `Header` component with game info
   - Add navigation and menu options
   - Implement game settings modal
