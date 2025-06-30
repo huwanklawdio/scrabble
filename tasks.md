@@ -119,7 +119,7 @@
 
 ### 4.1 Game Board Components
 
-- 🔴 **Task 4.1.1**: Board component
+- 🟢 **Task 4.1.1**: Board component
   - Create `Board` component with 15×15 grid
   - Add premium square visual indicators
   - Implement tile display on board

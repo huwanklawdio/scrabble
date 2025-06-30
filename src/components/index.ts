@@ -7,7 +7,6 @@
 
 // Export component types that are already defined
 export type {
-  BoardProps,
   BoardCellProps,
   TileProps,
   TileRackProps,
@@ -20,8 +19,11 @@ export type {
   GameEndModalProps,
 } from '../types';
 
+// Board Components
+export { Board } from './Board';
+export type { BoardProps } from './Board';
+
 // TODO: Add component exports as they are implemented:
-// export { default as Board } from './Board/Board';
 // export { default as BoardCell } from './Board/BoardCell';
 // export { default as Tile } from './Board/Tile';
 // export { default as TileRack } from './Player/TileRack';
