@@ -24,9 +24,10 @@ export { Board } from './Board';
 export type { BoardProps } from './Board';
 export { BoardCell } from './BoardCell';
 export type { BoardCellProps } from './BoardCell';
+export { Tile, TileGroup } from './Tile';
+export type { TileProps, TileGroupProps } from './Tile';
 
 // TODO: Add component exports as they are implemented:
-// export { default as Tile } from './Board/Tile';
 // export { default as TileRack } from './Player/TileRack';
 // export { default as ScoreBoard } from './Player/ScoreBoard';
 // export { default as GameControls } from './Controls/GameControls';

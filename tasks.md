@@ -131,7 +131,7 @@
   - Implement hover and selection states
   - Add accessibility attributes
 
-- 🔴 **Task 4.1.3**: Tile component
+- 🟢 **Task 4.1.3**: Tile component
   - Create `Tile` component with letter and points
   - Add drag functionality
   - Implement visual states (selected, placed, etc.)

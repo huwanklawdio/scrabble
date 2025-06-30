@@ -1,13 +1,27 @@
 import { useState, useEffect } from 'react';
 import { GameProvider } from './contexts/GameContext';
-import { Board } from './components';
+import { Board, Tile, TileGroup } from './components';
 import { useGame } from './contexts/GameContext';
+import type { Tile as TileType } from './types/game';
 
 function GameContent() {
   const { gameState, initializeGame, addPlayer, startGame } = useGame();
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [highlightedCells, setHighlightedCells] = useState<Set<string>>(new Set());
   const [dragOverCell, setDragOverCell] = useState<{ row: number; col: number } | null>(null);
+  const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
+  const [draggedTile, setDraggedTile] = useState<TileType | null>(null);
+  
+  // Demo tiles for testing
+  const [demoTiles] = useState<TileType[]>([
+    { id: 'demo-1', letter: 'A', points: 1, isBlank: false },
+    { id: 'demo-2', letter: 'R', points: 1, isBlank: false },
+    { id: 'demo-3', letter: 'T', points: 1, isBlank: false },
+    { id: 'demo-4', letter: 'S', points: 1, isBlank: false },
+    { id: 'demo-5', letter: '', points: 0, isBlank: true },
+    { id: 'demo-6', letter: 'E', points: 1, isBlank: false },
+    { id: 'demo-7', letter: 'N', points: 1, isBlank: false },
+  ]);
 
   useEffect(() => {
     // Initialize a demo game
@@ -48,8 +62,8 @@ function GameContent() {
     setHighlightedCells(new Set());
   };
 
-  const handleCellDrop = (row: number, col: number, tile: any) => {
-    console.log(`Tile dropped at (${row}, ${col}):`, tile);
+  const handleCellDrop = (row: number, col: number, tile: TileType) => {
+    console.log(`Tile ${tile.letter} dropped at (${row}, ${col})`);
     // In a real implementation, this would update the game state
   };
 
@@ -59,6 +73,18 @@ function GameContent() {
 
   const handleCellDragLeave = (row: number, col: number) => {
     setDragOverCell(null);
+  };
+  
+  const handleTileClick = (tile: TileType) => {
+    setSelectedTileId(tile.id === selectedTileId ? null : tile.id);
+  };
+  
+  const handleTileDragStart = (tile: TileType) => {
+    setDraggedTile(tile);
+  };
+  
+  const handleTileDragEnd = (tile: TileType) => {
+    setDraggedTile(null);
   };
 
   return (
@@ -88,33 +114,38 @@ function GameContent() {
           </div>
         )}
         
-        <div className="text-center mt-8 text-gray-600">
-          <p className="mb-2">✨ Click on cells to select them</p>
-          <p className="mb-2">✨ Hover over cells to see row/column highlights</p>
-          <p>✨ Drag and drop support ready (tiles will be added in next task)</p>
-        </div>
-        
-        {/* Demo Draggable Tile for Testing */}
-        <div className="flex justify-center mt-8">
-          <div
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData('application/json', JSON.stringify({
-                id: 'demo-tile',
-                letter: 'A',
-                points: 1,
-                isBlank: false
-              }));
-            }}
-            className="w-16 h-16 bg-amber-100 rounded shadow-lg flex flex-col items-center justify-center cursor-move hover:shadow-xl transition-shadow"
-          >
-            <span className="text-2xl font-bold">A</span>
-            <span className="text-sm">1</span>
+        {/* Demo Tile Rack */}
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-700 text-center mb-4">
+            Your Tiles (Demo)
+          </h2>
+          <div className="flex justify-center">
+            <div className="bg-wood-pattern bg-amber-800 p-4 rounded-lg shadow-xl">
+              <TileGroup
+                tiles={demoTiles}
+                onTileClick={handleTileClick}
+                onTileDragStart={handleTileDragStart}
+                onTileDragEnd={handleTileDragEnd}
+                selectedTileIds={new Set(selectedTileId ? [selectedTileId] : [])}
+                size="large"
+                gap="gap-3"
+              />
+            </div>
           </div>
         </div>
-        <p className="text-center mt-2 text-gray-500 text-sm">
-          Drag this tile to any empty cell on the board
-        </p>
+        
+        <div className="text-center mt-8 text-gray-600 space-y-2">
+          <p>✨ Click tiles to select them</p>
+          <p>✨ Drag tiles to empty cells on the board</p>
+          <p>✨ Click or hover cells for interactive effects</p>
+          <p>✨ Blank tiles show "?" and can be assigned any letter</p>
+        </div>
+        
+        {draggedTile && (
+          <div className="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+            <p className="text-sm text-gray-600">Dragging: {draggedTile.letter || 'Blank'}</p>
+          </div>
+        )}
       </div>
     </div>
   );
