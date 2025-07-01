@@ -44,7 +44,7 @@ export interface GameStateInfo {
  * Hook for accessing game state and common operations
  */
 export function useGameState(): GameStateInfo {
-  const { gameState, currentPlayer, gameManager } = useGame();
+  const { gameState, currentPlayer } = useGame();
   
   // Memoized basic state
   const basicState = useMemo(() => ({

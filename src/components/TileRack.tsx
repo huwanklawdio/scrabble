@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Tile, TileGroup } from './Tile';
+import { TileGroup } from './Tile';
 import type { Tile as TileType } from '../types/game';
 
 // ================================
@@ -92,7 +92,6 @@ export const TileRack: React.FC<TileRackProps> = ({
   }, [tiles, internalSortBy]);
 
   const emptySlots = Math.max(0, maxTiles - tiles.length);
-  const canExchange = allowExchange && selectedTileIds.size > 0 && !isDisabled;
   const exchangeSelectedTiles = isExchangeMode ? exchangeSelection : selectedTileIds;
 
   // ================================

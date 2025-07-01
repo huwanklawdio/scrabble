@@ -14,5 +14,8 @@ export {
   type GameProviderProps
 } from './GameContext';
 
+// Import for default export
+import GameContext from './GameContext';
+
 // Export all contexts
 export default GameContext; 

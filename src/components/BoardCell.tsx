@@ -236,8 +236,9 @@ export const BoardCell: React.FC<BoardCellProps> = ({
         try {
           const legacyData = e.dataTransfer.getData('application/json');
           if (legacyData) {
-            tileToUse = JSON.parse(legacyData);
-            dragData = { type: 'tile', tile: tileToUse };
+            const parsedTile = JSON.parse(legacyData);
+            tileToUse = parsedTile;
+            dragData = { type: 'tile', tile: parsedTile };
           }
         } catch (error) {
           console.warn('Failed to parse drag data:', error);
@@ -256,10 +257,10 @@ export const BoardCell: React.FC<BoardCellProps> = ({
           );
           
           if (dropZoneState.isValidTarget) {
-            DragAccessibility.announceDropAction(tileToUse, row, col, true);
-            onDrop(row, col, tileToUse);
+            DragAccessibility.announceDropAction(dragData.tile, row, col, true);
+            onDrop(row, col, dragData.tile);
           } else {
-            DragAccessibility.announceDropAction(tileToUse, row, col, false);
+            DragAccessibility.announceDropAction(dragData.tile, row, col, false);
           }
         } else {
           // Legacy behavior

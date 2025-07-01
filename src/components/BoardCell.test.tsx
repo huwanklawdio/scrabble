@@ -5,11 +5,11 @@ import type { BoardCell as BoardCellType, Tile } from '../types/game';
 
 describe('BoardCell Component', () => {
   const mockCell: BoardCellType = {
-    row: 0,
-    col: 0,
-    tile: null,
+    position: { row: 0, col: 0 },
+    tile: undefined,
     isEmpty: true,
-    premiumType: null,
+    premiumType: 'normal',
+    isCenter: false,
   };
 
   const mockTile: Tile = {
@@ -17,6 +17,7 @@ describe('BoardCell Component', () => {
     letter: 'A',
     points: 1,
     isBlank: false,
+    status: 'board',
   };
 
   const defaultProps = {

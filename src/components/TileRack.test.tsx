@@ -54,7 +54,7 @@ describe('TileRack Component', () => {
 
     it('applies custom className', () => {
       const { container } = render(<TileRack {...defaultProps} className="custom-rack" />);
-      expect(container.firstChild?.className).toContain('custom-rack');
+      expect((container.firstChild as Element)?.className).toContain('custom-rack');
     });
 
     it('renders in vertical orientation', () => {

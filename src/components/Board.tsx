@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameState } from '../hooks/useGameState';
 import { BoardCell } from './BoardCell';
-import type { Board as BoardType, Tile } from '../types/game';
+import type { Tile } from '../types/game';
 
 // ================================
 // Board Component Props

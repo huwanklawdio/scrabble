@@ -2,22 +2,18 @@
 // Game State Management System
 // ================================
 
-import { createEmptyBoard, createBoardFromState } from '../data/board';
+import { createEmptyBoard } from '../data/board';
 import { createTileBag, drawTiles as drawTilesFromArray } from '../data/tiles';
 import { initializeDefaultDictionary, type ScrabbleDictionary } from '../data/dictionary';
 import type {
   GameState,
-  GamePhase,
   GameMode,
   GameSettings,
   Player,
   PlayerStatus,
-  Board,
-  BoardPosition,
   Move,
   TilePlacement,
   MoveValidation,
-  WordFormed,
   Tile,
   TileBag
 } from '../types/game';
@@ -295,7 +291,7 @@ export class GameStateManager {
   private state: GameState;
   private playerManager: PlayerManager;
   private eventListeners: Map<GameEventType, GameEventListener[]> = new Map();
-  private dictionary: ScrabbleDictionary | null = null;
+  private _dictionary: ScrabbleDictionary | null = null;
   
   constructor(config: GameConfig = { mode: 'local', settings: {} }) {
     this.playerManager = new PlayerManager();
@@ -345,14 +341,21 @@ export class GameStateManager {
   private async initializeDictionary(customDictionary?: ScrabbleDictionary): Promise<void> {
     try {
       if (customDictionary) {
-        this.dictionary = customDictionary;
+        this._dictionary = customDictionary;
       } else {
-        this.dictionary = initializeDefaultDictionary();
+        this._dictionary = initializeDefaultDictionary();
       }
     } catch (error) {
       console.error('Failed to initialize dictionary:', error);
       this.emitEvent('error', { message: 'Failed to initialize dictionary' });
     }
+  }
+  
+  /**
+   * Get dictionary for word validation
+   */
+  getDictionary(): ScrabbleDictionary | null {
+    return this._dictionary;
   }
   
   /**
@@ -814,6 +817,7 @@ export class GameStateManager {
       
       return true;
     } catch (error) {
+      console.error('Failed to import game state:', error);
       this.emitEvent('error', { message: 'Failed to import game state' });
       return false;
     }

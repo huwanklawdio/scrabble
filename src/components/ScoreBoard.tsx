@@ -293,7 +293,7 @@ export const ScoreBoard: React.FC<ScoreBoardProps> = ({
 
       {/* Players */}
       <div className={playersGridClasses}>
-        {sortedPlayers.map((player, index) => (
+        {sortedPlayers.map((player) => (
           <PlayerCard
             key={player.id}
             player={player}

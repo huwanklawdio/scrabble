@@ -33,7 +33,7 @@ import {
 } from './board';
 
 import { createTile } from './tiles';
-import type { Board, BoardPosition, Tile } from '../types';
+import type { Board, Tile } from '../types';
 import { BOARD_SIZE, PREMIUM_SQUARES } from '../types';
 
 describe('Board Configuration', () => {

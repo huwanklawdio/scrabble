@@ -7,11 +7,10 @@ const {
   DragDataManager,
   DragPreviewManager,
   DragStateManager,
-  TouchSupportDetector,
   DragAccessibility,
 } = dragAndDropUtils;
 
-const { TouchDragManager, useTouchDrag } = touchDragAndDropUtils;
+const { TouchDragManager } = touchDragAndDropUtils;
 
 // ================================
 // Tile Component Props

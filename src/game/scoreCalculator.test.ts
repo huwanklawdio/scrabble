@@ -18,13 +18,13 @@ import {
   DEFAULT_SCORING_CONFIG
 } from './scoreCalculator';
 import { createEmptyBoard } from '../data/board';
+import type { TileStatus } from '../types/game';
 import { createTile } from '../data/tiles';
 import type { 
   Board, 
   TilePlacement, 
   WordFormed, 
-  Tile,
-  BoardPosition 
+  Tile
 } from '../types/game';
 
 describe('Score Calculator', () => {
@@ -278,7 +278,7 @@ describe('Score Calculator', () => {
       }];
 
       // Place tiles on board
-      placements.forEach((placement, index) => {
+      placements.forEach((placement) => {
         const { row, col } = placement.position;
         board[row][col].tile = placement.tile;
         board[row][col].isEmpty = false;
@@ -671,7 +671,7 @@ describe('Utility Functions', () => {
           id: 'blank1',
           letter: '',
           points: 0,
-          status: 'rack',
+          status: 'rack' as TileStatus,
           isBlank: true
         } // 0 points
       ];

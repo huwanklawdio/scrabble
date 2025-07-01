@@ -6,9 +6,7 @@ import type {
   GameState, 
   Player, 
   TilePlacement, 
-  MoveValidation,
-  GamePhase,
-  Move
+  MoveValidation
 } from '../types/game';
 
 // ================================
@@ -201,7 +199,7 @@ export function GameProvider({ children, config }: GameProviderProps) {
   useEffect(() => {
     if (!state.gameManager) return;
     
-    const handleGameEvent = (event: GameEvent) => {
+    const handleGameEvent = (_event: GameEvent) => {
       // Update state when game events occur
       const newState = state.gameManager!.getState();
       dispatch({ type: 'UPDATE_STATE', payload: { state: newState } });

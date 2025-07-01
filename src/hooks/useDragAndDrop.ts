@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import type { BoardPosition, Tile } from '../types/game';
+import type { BoardPosition } from '../types/game';
 
 // ================================
 // Drag & Drop Types
@@ -130,28 +130,28 @@ export function useDragAndDrop(
   // Drag Actions
   // ================================
   
-  const startDrag = useCallback((item: DragItem, event: React.MouseEvent | React.DragEvent) => {
+  const startDrag = useCallback((item: DragItem, _event: React.MouseEvent | React.DragEvent) => {
     if (!fullConfig.enableMouse) return;
     
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    const rect = (_event.target as HTMLElement).getBoundingClientRect();
     const offset = {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
+      x: _event.clientX - rect.left,
+      y: _event.clientY - rect.top
     };
     
     setDragState({
       isDragging: true,
       dragItem: item,
-      dragPosition: { x: event.clientX, y: event.clientY },
+      dragPosition: { x: _event.clientX, y: _event.clientY },
       dragOffset: offset,
       hoveredDropZone: null,
       canDrop: false
     });
     
     // Prevent default drag behavior
-    if ('dataTransfer' in event) {
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/plain', item.id);
+    if ('dataTransfer' in _event) {
+      _event.dataTransfer.effectAllowed = 'move';
+      _event.dataTransfer.setData('text/plain', item.id);
     }
   }, [fullConfig.enableMouse]);
   
@@ -166,7 +166,7 @@ export function useDragAndDrop(
     let hoveredDropZone: DropZone | null = null;
     
     if (elementUnder) {
-      for (const [_, dropZone] of dropZones.current) {
+      for (const [, dropZone] of dropZones.current) {
         if (dropZone.element && dropZone.element.contains(elementUnder)) {
           hoveredDropZone = dropZone;
           break;
@@ -304,7 +304,7 @@ export function useDragAndDrop(
     }
   }, [touchState, dragState.isDragging, fullConfig.touchDragThreshold, updateDragPosition]);
   
-  const handleTouchEnd = useCallback((event: React.TouchEvent) => {
+  const handleTouchEnd = useCallback(() => {
     if (dragState.isDragging) {
       endDrag();
     } else {

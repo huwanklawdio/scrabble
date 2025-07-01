@@ -9,8 +9,7 @@ import type {
   TilePlacement,
   WordFormed,
   ScoreBreakdown,
-  PremiumSquareType,
-  BINGO_BONUS
+  PremiumSquareType
 } from '../types/game';
 
 // ================================

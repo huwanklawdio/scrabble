@@ -66,7 +66,7 @@ export class TouchDragManager {
   // Touch Event Handlers
   // ================================
 
-  handleTouchStart(e: TouchEvent, tile: Tile, sourceElement: HTMLElement): void {
+  handleTouchStart(e: TouchEvent, tile: Tile, _: HTMLElement): void { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (!TouchSupportDetector.isTouchDevice()) return;
 
     const touch = e.touches[0];
@@ -124,7 +124,7 @@ export class TouchDragManager {
     e.preventDefault();
   }
 
-  handleTouchEnd(e: TouchEvent): void {
+  handleTouchEnd(_: TouchEvent): void { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (this.dragState.isDragging && this.activeDropTarget?.isValid) {
       this.executeDrop();
       this.triggerHapticFeedback('success');
@@ -318,7 +318,7 @@ export class TouchDragManager {
 
     try {
       navigator.vibrate(patterns[type]);
-    } catch (error) {
+    } catch {
       // Haptic feedback not supported or failed
     }
   }

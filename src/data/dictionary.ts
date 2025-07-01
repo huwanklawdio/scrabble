@@ -2,7 +2,6 @@
 // Scrabble Dictionary System
 // ================================
 
-import type { TileLetter } from './tiles';
 
 // ================================
 // Dictionary Types

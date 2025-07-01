@@ -9,6 +9,7 @@ describe('Tile Component', () => {
     letter: 'A',
     points: 1,
     isBlank: false,
+    status: 'rack',
   };
 
   const blankTile: TileType = {
@@ -16,6 +17,7 @@ describe('Tile Component', () => {
     letter: '',
     points: 0,
     isBlank: true,
+    status: 'rack',
   };
 
   beforeEach(() => {
@@ -242,9 +244,9 @@ describe('Tile Component', () => {
 
 describe('TileGroup Component', () => {
   const mockTiles: TileType[] = [
-    { id: 'tile-1', letter: 'A', points: 1, isBlank: false },
-    { id: 'tile-2', letter: 'B', points: 3, isBlank: false },
-    { id: 'tile-3', letter: 'C', points: 3, isBlank: false },
+    { id: 'tile-1', letter: 'A', points: 1, isBlank: false, status: 'rack' },
+    { id: 'tile-2', letter: 'B', points: 3, isBlank: false, status: 'rack' },
+    { id: 'tile-3', letter: 'C', points: 3, isBlank: false, status: 'rack' },
   ];
 
   it('renders multiple tiles', () => {
@@ -286,6 +288,6 @@ describe('TileGroup Component', () => {
     const { container } = render(<TileGroup tiles={mockTiles} gap="gap-4" />);
     const group = container.firstChild;
     
-    expect(group?.className).toContain('gap-4');
+    expect((group as Element)?.className).toContain('gap-4');
   });
 });

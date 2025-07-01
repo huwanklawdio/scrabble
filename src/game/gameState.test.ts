@@ -14,7 +14,7 @@ import {
   type GameEvent,
   type GameEventListener
 } from './gameState';
-import type { Player, GamePhase, TilePlacement } from '../types/game';
+import type { Player, TilePlacement } from '../types/game';
 
 describe('Game State Management', () => {
   let gameManager: GameStateManager;
@@ -215,20 +215,19 @@ describe('Game State Management', () => {
 
       it('should set first player as host', () => {
         const alice = gameManager.addPlayer({ name: 'Alice' });
-        const bob = gameManager.addPlayer({ name: 'Bob' });
+        gameManager.addPlayer({ name: 'Bob' });
         
         expect(alice?.isHost).toBe(true);
-        expect(bob?.isHost).toBe(false);
+        expect(gameManager.getState().players[1]?.isHost).toBe(false);
       });
     });
 
     describe('Player Management', () => {
       it('should add players during setup', () => {
         const alice = gameManager.addPlayer({ name: 'Alice' });
-        const bob = gameManager.addPlayer({ name: 'Bob' });
+        gameManager.addPlayer({ name: 'Bob' });
         
         expect(alice).toBeDefined();
-        expect(bob).toBeDefined();
         expect(gameManager.getState().players).toHaveLength(2);
       });
 
@@ -256,7 +255,7 @@ describe('Game State Management', () => {
 
       it('should remove players during setup', () => {
         const alice = gameManager.addPlayer({ name: 'Alice' });
-        const bob = gameManager.addPlayer({ name: 'Bob' });
+        gameManager.addPlayer({ name: 'Bob' });
         
         const result = gameManager.removePlayer(alice!.id);
         expect(result).toBe(true);
@@ -266,7 +265,7 @@ describe('Game State Management', () => {
 
       it('should transfer host when host is removed', () => {
         const alice = gameManager.addPlayer({ name: 'Alice' }); // Host
-        const bob = gameManager.addPlayer({ name: 'Bob' });
+        gameManager.addPlayer({ name: 'Bob' });
         
         gameManager.removePlayer(alice!.id);
         

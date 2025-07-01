@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GameControls } from './GameControls';
 import type { GamePhase } from '../types/game';
@@ -337,7 +337,7 @@ describe('GameControls Component', () => {
     it('applies custom className', () => {
       const { container } = render(<GameControls {...defaultProps} className="custom-controls" />);
       
-      expect(container.firstChild?.className).toContain('custom-controls');
+      expect((container.firstChild as Element)?.className).toContain('custom-controls');
     });
 
     it('shows keyboard shortcuts help when enabled and not compact', () => {

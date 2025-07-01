@@ -153,7 +153,7 @@ export interface FormStateHook<T extends Record<string, any> = Record<string, an
 
 export function useFormState<T extends Record<string, any> = Record<string, any>>(
   config: FormConfig<T>,
-  onSubmit?: (data: T) => void | Promise<void>,
+  _onSubmit?: (data: T) => void | Promise<void>,
   onAutoSave?: (data: T) => void
 ): FormStateHook<T> {
   
@@ -291,7 +291,7 @@ export function useFormState<T extends Record<string, any> = Record<string, any>
       const fieldConfig = config.fields[fieldName];
       if (fieldConfig.validateOnChange || config.validateOnChange) {
         const formData = Object.keys(newFields).reduce((acc, key) => {
-          acc[key] = newFields[key as keyof T].value;
+          (acc as Record<string, any>)[key] = newFields[key as keyof T].value;
           return acc;
         }, {} as T);
         

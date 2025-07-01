@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useGame } from '../contexts/GameContext';
 import type { 
   TilePlacement, 
   BoardPosition, 
   Tile, 
-  MoveValidation,
-  Board 
+  MoveValidation
 } from '../types/game';
 
 // ================================

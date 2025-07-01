@@ -4,8 +4,7 @@ import type {
   TilePlacement, 
   MoveValidation,
   BoardPosition,
-  Tile,
-  Player
+  Tile
 } from '../types/game';
 
 // ================================

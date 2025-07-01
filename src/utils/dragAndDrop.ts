@@ -195,8 +195,8 @@ export class DragPreviewManager {
 export class DropZoneValidator {
   static validateDropTarget(
     dragData: DragData | null,
-    targetRow: number,
-    targetCol: number,
+    _targetRow: number,
+    _targetCol: number,
     isOccupied: boolean,
     isDisabled: boolean = false
   ): DropZoneState {

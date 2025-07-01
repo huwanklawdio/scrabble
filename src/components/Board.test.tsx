@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Board } from './Board';
 import { GameProvider } from '../contexts/GameContext';
-import { createLocalGame } from '../game/gameState';
 
 // Mock the useGameState hook
 vi.mock('../hooks/useGameState', () => ({

@@ -6,13 +6,8 @@ import { validateWord } from '../data/dictionary';
 import type {
   Board,
   BoardPosition,
-  BoardCell,
-  Tile,
   TilePlacement,
-  WordFormed,
-  MoveValidation,
-  BOARD_SIZE,
-  PREMIUM_SQUARES
+  MoveValidation
 } from '../types/game';
 
 // ================================
@@ -431,7 +426,6 @@ export class MoveValidator {
     // Multiple tiles - determine direction from placement alignment
     const positions = placements.map(p => p.position);
     const rows = positions.map(p => p.row);
-    const cols = positions.map(p => p.col);
     
     const allSameRow = rows.every(row => row === rows[0]);
     const direction = allSameRow ? 'horizontal' : 'vertical';
@@ -563,9 +557,12 @@ export class MoveValidator {
    * Get all possible words at a position (for move suggestions)
    */
   findPossibleWords(
-    board: Board, 
-    position: BoardPosition, 
-    availableLetters: string[]
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _board: Board, 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _position: BoardPosition, 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _availableLetters: string[]
   ): WordAnalysis[] {
     // This would be used for AI or hint systems
     // Implementation would be more complex, involving dictionary lookup

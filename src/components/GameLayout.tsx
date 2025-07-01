@@ -152,7 +152,7 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
           {/* Score Board */}
           <div className={config.sideAreaClass}>
             <div className="w-full">
-              {React.cloneElement(scoreBoard as React.ReactElement, { 
+              {React.cloneElement(scoreBoard as React.ReactElement<any>, { 
                 compact: compactMode 
               })}
             </div>
@@ -169,7 +169,7 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
           <div className={config.bottomAreaClass}>
             {/* Tile Rack */}
             <div className="w-full">
-              {React.cloneElement(tileRack as React.ReactElement, { 
+              {React.cloneElement(tileRack as React.ReactElement<any>, { 
                 orientation: 'horizontal',
                 compact: compactMode,
                 size: compactMode ? 'small' : 'medium'
@@ -178,7 +178,7 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
 
             {/* Game Controls */}
             <div className="w-full">
-              {React.cloneElement(gameControls as React.ReactElement, { 
+              {React.cloneElement(gameControls as React.ReactElement<any>, { 
                 compact: compactMode,
                 orientation: 'horizontal'
               })}
@@ -220,7 +220,7 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
 
           {/* Tile Rack */}
           <div className="w-full max-w-2xl">
-            {React.cloneElement(tileRack as React.ReactElement, { 
+            {React.cloneElement(tileRack as React.ReactElement<any>, { 
               orientation: 'horizontal',
               compact: compactMode,
               size: compactMode ? 'medium' : 'large'
@@ -232,14 +232,14 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
         <div className={config.sideAreaClass}>
           {/* Score Board */}
           <div className="flex-1">
-            {React.cloneElement(scoreBoard as React.ReactElement, { 
+            {React.cloneElement(scoreBoard as React.ReactElement<any>, { 
               compact: compactMode 
             })}
           </div>
 
           {/* Game Controls */}
           <div className="flex-shrink-0">
-            {React.cloneElement(gameControls as React.ReactElement, { 
+            {React.cloneElement(gameControls as React.ReactElement<any>, { 
               compact: compactMode,
               orientation: 'vertical'
             })}

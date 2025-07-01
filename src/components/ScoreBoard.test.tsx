@@ -245,8 +245,6 @@ describe('ScoreBoard Component', () => {
       // Set Bob (middle score) as current player
       render(<ScoreBoard {...defaultProps} currentPlayerIndex={1} />);
       
-      const playerCards = screen.getAllByText(/ACTIVE|WAITING|PASSED/);
-      
       // Bob should be first (current player), then Charlie (highest score), then Alice
       expect(screen.getByText("Bob's turn")).toBeInTheDocument();
     });
@@ -327,7 +325,7 @@ describe('ScoreBoard Component', () => {
     it('applies custom className', () => {
       const { container } = render(<ScoreBoard {...defaultProps} className="custom-scoreboard" />);
       
-      expect(container.firstChild?.className).toContain('custom-scoreboard');
+      expect((container.firstChild as Element)?.className).toContain('custom-scoreboard');
     });
   });
 });

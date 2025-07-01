@@ -13,7 +13,6 @@ import {
   getActiveDictionary,
   DICTIONARY_PRESETS,
   type DictionaryType,
-  type DictionaryMetadata
 } from './dictionary';
 
 describe('Dictionary System', () => {
@@ -22,8 +21,7 @@ describe('Dictionary System', () => {
 
   beforeEach(() => {
     // Create fresh instances for each test
-    const metadata = DICTIONARY_PRESETS.DEMO;
-    dictionary = new ScrabbleDictionary(metadata);
+    dictionary = new ScrabbleDictionary(DICTIONARY_PRESETS.DEMO);
     manager = new DictionaryManager();
   });
 
@@ -316,7 +314,7 @@ describe('Dictionary System', () => {
       });
 
       it('should remove dictionary', () => {
-        const dict = manager.loadPresetDictionary('demo', 'DEMO');
+        manager.loadPresetDictionary('demo', 'DEMO');
         manager.setActiveDictionary('demo');
         
         const removed = manager.removeDictionary('demo');

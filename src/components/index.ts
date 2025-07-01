@@ -2,23 +2,6 @@
 // UI Components Export Index
 // ================================
 
-// This file will export all UI components once they are implemented
-// Currently empty - components will be added in subsequent tasks
-
-// Export component types that are already defined
-export type {
-  BoardCellProps,
-  TileProps,
-  TileRackProps,
-  ScoreBoardProps,
-  PlayerCardProps,
-  GameControlsProps,
-  GameStatsProps,
-  ModalProps,
-  GameSetupModalProps,
-  GameEndModalProps,
-} from '../types';
-
 // Board Components
 export { Board } from './Board';
 export type { BoardProps } from './Board';

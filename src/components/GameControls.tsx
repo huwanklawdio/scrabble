@@ -139,7 +139,7 @@ export const GameControls: React.FC<GameControlsProps> = ({
   canSubmit,
   canPass,
   canExchange,
-  hasSelectedTiles,
+  hasSelectedTiles: _, // eslint-disable-line @typescript-eslint/no-unused-vars
   placedTilesCount,
   onSubmit,
   onPass,

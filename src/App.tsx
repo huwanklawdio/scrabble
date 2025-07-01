@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { GameProvider } from './contexts/GameContext';
-import { Board, Tile, TileGroup, TileRack, ScoreBoard, GameControls, GameLayout, Header } from './components';
+import { Board, TileRack, ScoreBoard, GameControls, GameLayout, Header } from './components';
 import { useGame } from './contexts/GameContext';
 import type { Tile as TileType } from './types/game';
 
@@ -71,7 +71,7 @@ function GameContent() {
     setDragOverCell({ row, col });
   };
 
-  const handleCellDragLeave = (row: number, col: number) => {
+  const handleCellDragLeave = () => {
     setDragOverCell(null);
   };
   
@@ -83,7 +83,7 @@ function GameContent() {
     setDraggedTile(tile);
   };
   
-  const handleTileDragEnd = (tile: TileType) => {
+  const handleTileDragEnd = () => {
     setDraggedTile(null);
   };
 
